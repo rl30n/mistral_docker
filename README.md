@@ -30,7 +30,8 @@ ___
 
 ### 1. Requisitos previos
 
-- Docker Desktop instalado (con al menos 6 GB de RAM asignada).
+- Docker + Docker Compose instalados.
+- Sistema operativo: **Linux x86_64**.
 - Un archivo `.env` con estas variables definidas:
 
 ```env
@@ -119,3 +120,9 @@ Esto detiene los contenedores y elimina los volúmenes persistentes.
 - El modelo de lenguaje se sirve directamente sin necesidad de `ollama`.
 
 ---
+
+### ⚠️ Compatibilidad
+
+- Este entorno **no funciona en Apple Silicon (M1/M2/M3)** sin emulación (QEMU).
+- Está diseñado y probado para entornos **Linux x86_64**.
+- Para Mac, se recomienda usar `ollama/ollama` como alternativa.
