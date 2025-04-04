@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>QA Web</title>
+</head>
+<body align=center>
+	<img src="https://www.repsol.es/content/dam/repsol-ecommerce/icons/logo.png.transform/rp-rendition-xs/image.png" style="width: 300px;"/> 
+    <h1 style="font-family:'Arial'; font-size: 32px; color: rgb(255,98,0);" >Haz una pregunta</h1>
+    <input id="pregunta" type="text" style="font-family:'Arial'; font-size: 16px; width: 85%;">
+    <br/><br/>
+    <button onclick="enviarPregunta()" style="background-color:rgb(1, 106, 127); color:rgb(255,255,255);font-size: 16px; border-radius:8px; border-color: rgba(0, 0, 0, 0); padding: 12px;">Preguntar</button>
+
+    <h2 style="font-family:'Arial'; font-size: 32px; color: rgb(255,98,0)" >Respuesta:</h2>
+    <div id="respuesta" align="left" style="border: 1px solid #ccc; padding: 10px;font-family:'Arial'; font-size: 16px; "></div>
+
+    <script>
+        function enviarPregunta() {
+            const pregunta = document.getElementById("pregunta").value;
+			const respuestaDiv = document.getElementById("respuesta");
+    		const spinner = document.getElementById("spinner");
+    		
+    		respuestaDiv.innerText = "";
+    		spinner.style.display = "flex";  // Mostrar spinner (flex lo centra)
+    		
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `pregunta=${encodeURIComponent(pregunta)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                respuestaDiv.innerText = data.respuesta;
+            })
+            .catch(err => {
+                respuestaDiv.innerText = "Error al procesar la respuesta.";
+            })
+            .finally(() => {
+		        spinner.style.display = "none";  // Ocultar spinner
+ 		    });
+        }
+    </script>
+    <div id="spinner" style="
+	    display: none;
+	    position: fixed;
+	    top: 0; left: 0;
+	   	width: 100%; height: 100%;
+		background-color: rgba(255, 255, 255, 0.8);
+	    z-index: 1000;
+	    justify-content: center;
+	    align-items: center;
+	">
+    <img src="https://www.bytesizedpieces.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fbytesizedpieces%2Fimage%2Fupload%2Fv1656084931%2Farticle%2Fa-how-to-guide-on-making-an-animated-loading-image-for-a-website%2Fanimated_loader_gif_n6b5x0.gif&w=1200&q=75" 
+    	alt="Cargando..." >
+	</div>
+</body>
+</html>
