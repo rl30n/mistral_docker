@@ -1,13 +1,13 @@
 version: "3.9"
 services:
   mistral:
-    build:
-      context: ./mistral
-      dockerfile: Dockerfile
+    image: ai/mistral:latest
+    command: serve
+    platform: linux/amd64
     ports:
       - "11434:11434"
-    volumes:
-      - ollama-models:/root/.ollama
+    networks:
+      - mistral-net
 
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
@@ -57,6 +57,8 @@ services:
       interval: 1s
       timeout: 5s
       retries: 120
+    networks:
+      - mistral-net
 
   es01:
     depends_on:
@@ -100,6 +102,8 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - mistral-net
 
   kibana:
     depends_on:
@@ -129,6 +133,9 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - mistral-net
+
   enterprisesearch:
     depends_on:
       es01:
@@ -162,7 +169,8 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-
+    networks:
+      - mistral-net
 
   app:
     build: .
@@ -175,10 +183,10 @@ services:
       - "8000:8000"
     stdin_open: true
     tty: true
+    networks:
+      - mistral-net
 
 volumes:
-  ollama-models:
-    driver: local
   certs:
     driver: local
   enterprisesearchdata:
@@ -189,5 +197,4 @@ volumes:
     driver: local
 
 networks:
-  default:
-    name: mistral-net
+  mistral-net:

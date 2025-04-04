@@ -62,16 +62,18 @@ Pregunta: {query}
 Respuesta:"""
 
     # Enviar a Mistral
-    response = requests.post("http://mistral:11434/api/generate", json={
-        "model": "mistral",
-        "prompt": prompt,
-        "stream": False
+    response = requests.post("http://mistral:11434/v1/chat/completions", json={
+        "model": "openchat",
+        "messages": [
+            {"role": "system", "content": "Eres un asistente inteligente que responde en base a las FAQs de Repsol."},
+            {"role": "user", "content": prompt}
+        ]
     })
     end_time = time.time()
     duration = end_time - start_time
 
     print("\n🤖 Respuesta generada por Elastic (con la IA Mistral):\n")
-    print(response.json()["response"])
+    print(response.json()["choices"][0]["message"]["content"])
     print("\n")
     print("*****************************")
     print(f"📄 IDs de documentos utilizados: {ids}")
@@ -79,6 +81,6 @@ Respuesta:"""
     print("*****************************")
 
     try:
-        return response.json()["response"]
+        return response.json()["choices"][0]["message"]["content"]
     except (KeyError, IndexError, TypeError):
         return "No se pudo interpretar la respuesta del modelo."
