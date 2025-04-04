@@ -7,6 +7,11 @@ Este proyecto contiene un entorno completo de contenedores Docker que integra:
 - Una aplicación web personalizada que consulta Elasticsearch y genera respuestas con Mistral.
 
 ---
+## Supuestos
+
+El elasticsearch estará vacío por defecto y con el uso de elasticdump hay que cargar el template y los datos de la carpeta example-info
+
+___
 
 ## 📦 Servicios incluidos
 
